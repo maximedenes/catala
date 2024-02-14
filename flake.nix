@@ -1,7 +1,7 @@
 {
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
-    nixpkgs.url = "github:maximedenes/nixpkgs/init-ocamlPackages-ninja_utils";
+    nixpkgs.url = "github:maximedenes/nixpkgs/init-catala-deps";
   };
 
   outputs = {nixpkgs, flake-utils, ...}:
@@ -14,12 +14,12 @@
 
             let
               pkgs = import nixpkgs { inherit system; };
-              ocamlPackages = pkgs.callPackage ./.nix/packages.nix {};
+              ocamlPackages = pkgs.ocaml-ng.ocamlPackages_4_14;
             in
 
             ocamlPackages.buildDunePackage {
               pname = "catala";
-              version = "0.8.0"; # TODO parse `catala.opam` with opam2json
+              version = "0.9.0"; # TODO parse `catala.opam` with opam2json
 
               minimumOCamlVersion = "4.11";
 
@@ -53,7 +53,7 @@
                 re
                 sedlex
                 ubase
-                unionfind
+                unionFind
                 visitors
                 z3
                 zarith
@@ -79,7 +79,7 @@
           defaultPackage = packages.catala;
           devShell =
             with import nixpkgs { inherit system; };
-            let op = ocamlPackages_4_14; in
+            let op = ocamlPackages; in
             mkShell {
               inputsFrom = [ packages.catala ];
               buildInputs = [

@@ -9,6 +9,7 @@
 , dates_calc
 , js_of_ocaml
 , js_of_ocaml-ppx
+, js_of_ocaml-compiler
 , menhir
 , menhirLib
 , ocamlgraph
@@ -27,6 +28,7 @@
 , cohttp-lwt-unix
 , ocolor
 , dune-build-info
+, ninja_utils
 }:
 
 buildDunePackage {
@@ -39,7 +41,7 @@ buildDunePackage {
 
   duneVersion = "3";
 
-  nativeBuildInputs = [ cppo menhir ocaml-crunch ];
+  nativeBuildInputs = [ cppo menhir ocaml-crunch js_of_ocaml-compiler ninja_utils ];
 
   propagatedBuildInputs = [
     alcotest

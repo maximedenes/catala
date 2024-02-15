@@ -30,12 +30,12 @@
 
 (menhir
  (modules tokens)
- (flags --only-tokens))
+ (flags --only-tokens --table --inspection))
 
 (menhir
  (modules tokens parser)
  (merge_into parser)
- (flags --external-tokens Tokens --table --explain))
+ (flags --external-tokens Tokens --table --explain --inspection))
 
 (rule
  (target grammar.html)

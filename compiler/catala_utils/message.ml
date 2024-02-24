@@ -285,11 +285,18 @@ let assert_internal_error condition fmt =
   if condition then raise_internal_error ("assertion failed: " ^^ fmt)
   else Format.ifprintf (Format.formatter_of_out_channel stdout) fmt
 
+let warnings = ref []
+
+let clear_warnings () = warnings := []
+
+let get_warnings () = !warnings
+
 let emit_multispanned_warning
     (pos : (Content.message option * Pos.t) list)
     format =
   Format.kdprintf
     (fun message ->
+      warnings := (message, pos) :: !warnings;
       Content.emit
         (MainMessage message
         :: List.map

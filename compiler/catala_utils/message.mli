@@ -106,6 +106,9 @@ val emit_spanned_warning :
 
 val emit_warning : ('a, Format.formatter, unit) format -> 'a
 
+val get_warnings : unit -> (Content.message * (Content.message option * Pos.t) list) list
+val clear_warnings : unit -> unit
+
 (** {1 Common log emission}*)
 
 val emit_log : ('a, Format.formatter, unit) format -> 'a

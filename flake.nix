@@ -79,7 +79,7 @@
           defaultPackage = packages.catala;
           devShell =
             with import nixpkgs { inherit system; };
-            let op = ocamlPackages; in
+            let op = pkgs.ocaml-ng.ocamlPackages_4_14; in
             mkShell {
               inputsFrom = [ packages.catala ];
               buildInputs = [

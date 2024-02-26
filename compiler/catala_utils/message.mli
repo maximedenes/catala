@@ -55,6 +55,9 @@ module Content : sig
   (** {2 Content emission}*)
 
   val emit : t -> content_type -> unit
+
+  val main_message : t -> (string * Pos.t) option
+
 end
 
 (** This functions emits the message according to the emission type defined by

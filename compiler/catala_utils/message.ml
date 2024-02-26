@@ -149,6 +149,21 @@ module Content = struct
   let of_string (s : string) : t =
     [MainMessage (fun ppf -> Format.pp_print_string ppf s)]
 
+  let main_pos content =
+    List.find_map
+      (function
+        | Position { pos_message = None; pos } -> Some pos
+        | _ -> None)
+      content
+    |> function
+    | None ->
+      List.find_map
+        (function
+          | Position { pos_message = _; pos } -> Some pos
+          | _ -> None)
+        content
+    | some -> some
+
   let emit (content : t) (target : content_type) : unit =
     match Cli.globals.message_format with
     | Cli.Human ->
@@ -186,21 +201,7 @@ module Content = struct
           let pos, message =
             match elt with
             | MainMessage m ->
-              let pos =
-                List.find_map
-                  (function
-                    | Position { pos_message = None; pos } -> Some pos
-                    | _ -> None)
-                  content
-                |> function
-                | None ->
-                  List.find_map
-                    (function
-                      | Position { pos_message = _; pos } -> Some pos
-                      | _ -> None)
-                    content
-                | some -> some
-              in
+              let pos = main_pos content in
               pos, m
             | Position { pos_message; pos } ->
               let message =
@@ -219,6 +220,14 @@ module Content = struct
           Format.pp_print_string ppf (unformat message))
         ppf content;
       Format.pp_print_newline ppf ()
+
+  let main_message l =
+    let msgl = List.filter_map (function MainMessage s -> Some (unformat s) | _ -> None) l in
+    match msgl, main_pos l with
+    | _ :: _, Some pos ->
+      Some (String.concat "\n" msgl, pos)
+    | _ -> None
+
 end
 
 open Content
